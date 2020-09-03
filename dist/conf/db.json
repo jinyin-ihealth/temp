@@ -1,6 +1,6 @@
 {
   "Hosts": [
-    "127.0.0.1:27017"
+    "mongodb"
   ],
   "Database": "cronsun",
   "#Timeout": "connect timeout duration/second",

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cronsun
+  labels:
+    app: cronsun
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cronsun
+  template:
+    metadata:
+      labels:
+        app: cronsun
+    spec:
+      containers:
+        - name: cronsun
+          image: wangjinyin1234/cronsunmongo:1.0
+          ports:
+            - containerPort: 7079
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cronsun
+spec:
+  selector:
+    app: cronsun
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 7079
+      targetPort: 7079
+      nodePort: 30022
+      

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo
+          resources:
+            limits:
+              cpu: "4"
+              memory: 700Mi
+            requests:
+              cpu: "1"
+              memory: 500Mi
+          volumeMounts:
+            - name: mongo-persistent-volume
+              mountPath: /data/db
+          ports:
+            - containerPort: 27017
+      nodeSelector:
+        topology.ebs.csi.aws.com/zone: us-west-2a
+      volumes:
+        - name: mongo-persistent-volume
+          persistentVolumeClaim:
+            claimName: mongo-pvc-3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+
